@@ -1,56 +1,120 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:flutter_trackflow/flutter_trackflow.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(HandlePermissionDemo());
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
+
+HandlePermissionDemoState pageState;
+
+class Item {
+  PermissionGroup group;
+  PermissionStatus status;
+
+  Item(this.group, this.status);
 }
 
-class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
+class HandlePermissionDemo extends StatefulWidget {
+  @override
+  HandlePermissionDemoState createState() {
+    pageState = HandlePermissionDemoState();
+    return pageState;
+  }
+}
+class HandlePermissionDemoState extends State<HandlePermissionDemo>{
+    List<Item> list = List<Item>();
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    initList();
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      platformVersion = await FlutterTrackflow.platformVersion;
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
+  void initList() {
+    list.clear();
+    for (var i = 0; i < PermissionGroup.values.length; i++) {
+      list.add(Item(PermissionGroup.values[i], PermissionStatus.granted));
     }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
+    resolveState();
   }
 
-  @override
-  Widget build(BuildContext context) {
+  void resolveState() {
+    for (var index = 0; index < PermissionGroup.values.length; index++) {
+      Future<PermissionStatus> status =
+          PermissionHandler().checkPermissionStatus(list[index].group);
+      status.then((PermissionStatus status) {
+        setState(() {
+          list[index].status = status;
+        });
+      });
+    }
+  }
+
+  permissionItem(int index) {
+    return Container(
+      child: ListTile(
+        leading: CircleAvatar(
+          child: Text(index.toString()),
+        ),
+        title: Text(pageState.list[index].group.toString()),
+        subtitle: (pageState.list[index].status != null)
+            ? Text(
+          pageState.list[index].status.toString(),
+          style: statusColors(index),
+        )
+            : null,
+        onTap: () {
+          requestPermission(index);
+        },
+      ),
+    );
+  }
+
+  statusColors(int index) {
+    switch (pageState.list[index].status.value) {
+      case 2:
+        return TextStyle(color: Colors.blue);
+      case 4:
+        return TextStyle(color: Colors.grey);
+      default:
+        return TextStyle(color: Colors.red);
+    }
+  }
+
+  Future requestPermission(int index) async {
+    print("hello");
+    await PermissionHandler().requestPermissions([pageState.list[index].group]);
+    pageState.initList();
+  }
+  Widget build(BuildContext context){
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
-        ),
+          appBar: AppBar(
+              title: Text("Permission List"),
+               actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: () {
+              initList();
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () {
+              PermissionHandler().openAppSettings();
+            },
+          )
+        ],
+          ),
+           body: ListView.builder(
+        itemCount: list.length,
+        itemBuilder: (context, index) {
+          return permissionItem(index);
+        },
+      ),
       ),
     );
   }
 }
+
