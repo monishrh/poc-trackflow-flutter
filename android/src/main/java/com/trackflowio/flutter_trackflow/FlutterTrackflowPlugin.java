@@ -5,7 +5,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.trackflowio.flutter_trackflow.PermissionManager.ActivityRegistry;
-import com.trackflowio.flutter_trackflow.PermissionManager.PermissionRegistry;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
@@ -43,8 +42,7 @@ public final class FlutterTrackflowPlugin implements FlutterPlugin, ActivityAwar
         if (registrar.activeContext() instanceof Activity) {
             plugin.startListeningToActivity(
                 registrar.activity(),
-                registrar::addActivityResultListener,
-                registrar::addRequestPermissionsResultListener
+                registrar::addActivityResultListener
             );
         }
     }
@@ -66,8 +64,7 @@ public final class FlutterTrackflowPlugin implements FlutterPlugin, ActivityAwar
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
         startListeningToActivity(
             binding.getActivity(),
-            binding::addActivityResultListener,
-            binding::addRequestPermissionsResultListener
+            binding::addActivityResultListener
         );
     }
 
@@ -94,9 +91,8 @@ public final class FlutterTrackflowPlugin implements FlutterPlugin, ActivityAwar
 
         methodCallHandler = new MethodCallHandlerImpl(
             applicationContext,
-            new AppSettingsManager(),
-            new PermissionManager(),
-            new ServiceManager()
+           
+            new PermissionManager()
         );
 
         methodChannel.setMethodCallHandler(methodCallHandler);
@@ -110,13 +106,13 @@ public final class FlutterTrackflowPlugin implements FlutterPlugin, ActivityAwar
 
     private void startListeningToActivity(
         Activity activity,
-        ActivityRegistry activityRegistry,
-        PermissionRegistry permissionRegistry
+        ActivityRegistry activityRegistry
+       
     ) {
         if (methodCallHandler != null) {
             methodCallHandler.setActivity(activity);
             methodCallHandler.setActivityRegistry(activityRegistry);
-            methodCallHandler.setPermissionRegistry(permissionRegistry);
+          
         }
     }
 
@@ -124,7 +120,6 @@ public final class FlutterTrackflowPlugin implements FlutterPlugin, ActivityAwar
         if (methodCallHandler != null) {
             methodCallHandler.setActivity(null);
             methodCallHandler.setActivityRegistry(null);
-            methodCallHandler.setPermissionRegistry(null);
-        }
+       }
     }
 }

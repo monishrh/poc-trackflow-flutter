@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -15,6 +17,8 @@ class Item {
   Item(this.group, this.status);
 }
 
+
+
 class HandlePermissionDemo extends StatefulWidget {
   @override
   HandlePermissionDemoState createState() {
@@ -24,32 +28,39 @@ class HandlePermissionDemo extends StatefulWidget {
 }
 class HandlePermissionDemoState extends State<HandlePermissionDemo>{
     List<Item> list = List<Item>();
+  
 
-  @override
+ @override
   void initState() {
     super.initState();
     initList();
   }
 
+
   void initList() {
     list.clear();
     for (var i = 0; i < PermissionGroup.values.length; i++) {
-      list.add(Item(PermissionGroup.values[i], PermissionStatus.granted));
-    }
-    resolveState();
-  }
-
-  void resolveState() {
-    for (var index = 0; index < PermissionGroup.values.length; index++) {
-      Future<PermissionStatus> status =
-          PermissionHandler().checkPermissionStatus(list[index].group);
+     Future<PermissionStatus> status = PermissionHandler().checkPermissionStatus(PermissionGroup.values[i]);
       status.then((PermissionStatus status) {
         setState(() {
-          list[index].status = status;
+         if(status==PermissionStatus.granted){
+      list.add(Item(PermissionGroup.values[i], PermissionStatus.granted));
+         }
+         else if(status==PermissionStatus.denied){
+           list.add(Item(PermissionGroup.values[i], PermissionStatus.denied)); 
+         }
+         else{
+           
+         }
+         
         });
       });
+       continue;
     }
+ 
   }
+
+ 
 
   permissionItem(int index) {
     return Container(
@@ -73,18 +84,18 @@ class HandlePermissionDemoState extends State<HandlePermissionDemo>{
 
   statusColors(int index) {
     switch (pageState.list[index].status.value) {
-      case 2:
+      case 0:
         return TextStyle(color: Colors.blue);
-      case 4:
-        return TextStyle(color: Colors.grey);
-      default:
+      case 1:
         return TextStyle(color: Colors.red);
+      default:
+        return TextStyle(color: Colors.grey);
     }
   }
 
   Future requestPermission(int index) async {
     print("hello");
-    await PermissionHandler().requestPermissions([pageState.list[index].group]);
+   
     pageState.initList();
   }
   Widget build(BuildContext context){
@@ -99,12 +110,7 @@ class HandlePermissionDemoState extends State<HandlePermissionDemo>{
               initList();
             },
           ),
-          IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () {
-              PermissionHandler().openAppSettings();
-            },
-          )
+        
         ],
           ),
            body: ListView.builder(

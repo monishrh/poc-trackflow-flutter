@@ -5,36 +5,43 @@ class PermissionStatus {
   final int value;
 
   /// Permission to access the requested feature is denied by the user.
-  static const PermissionStatus denied = PermissionStatus._(0);
+  static const PermissionStatus granted = PermissionStatus._(0);
 
   /// The feature is disabled (or not available) on the device.
   // static const PermissionStatus disabled = PermissionStatus._(1);
 
   /// Permission to access the requested feature is granted by the user.
-  static const PermissionStatus granted = PermissionStatus._(1);
+  static const PermissionStatus denied = PermissionStatus._(1);
 
   /// Permission to access the requested feature is denied by the OS (only on iOS).
   /// The user cannot change this app's status, possibly due to active restrictions such as
   /// parental controls being in place.
-  static const PermissionStatus restricted = PermissionStatus._(2);
-  static const PermissionStatus notdetermined = PermissionStatus._(3); 
+  /// 
+  /// 
+  static const PermissionStatus notapplicable = PermissionStatus._(2);
+   static const PermissionStatus neverask = PermissionStatus._(3);
+  static const PermissionStatus restricted = PermissionStatus._(4); 
   /// Permission is in an unknown state
-  static const PermissionStatus unknown = PermissionStatus._(4);
+  static const PermissionStatus  notdetermined= PermissionStatus._(5);
 
   static const List<PermissionStatus> values = <PermissionStatus>[
-    denied,
-    notdetermined,
     granted,
+    denied,
+    notapplicable,
+    neverask,
     restricted,
-    unknown,
+    notdetermined,
+    
   ];
 
   static const List<String> _names = <String>[
-    'denied',
-    'notdetermined',
     'granted',
+    'denied',
+    'notapplicable',
+    'neverask',
     'restricted',
-    'unknown',
+    'notdetermined'
+    
   ];
 
   @override
@@ -85,11 +92,11 @@ class PermissionGroup {
 
   /// Android: Calendar
   /// iOS: Calendar (Events)
-  static const PermissionGroup calendar = PermissionGroup._(0);
+  static const PermissionGroup calendar = PermissionGroup._(1);
 
   /// Android: Camera
   /// iOS: Photos (Camera Roll and Camera)
-  static const PermissionGroup camera = PermissionGroup._(1);
+  static const PermissionGroup camera = PermissionGroup._(0);
 
   /// Android: Contacts
   /// iOS: AddressBook
@@ -150,11 +157,11 @@ class PermissionGroup {
       PermissionGroup._(15);
 
   /// The unknown permission only used for return type, never requested
-  static const PermissionGroup unknown = PermissionGroup._(16);
+  // static const PermissionGroup unknown = PermissionGroup._(16);
 
   static const List<PermissionGroup> values = <PermissionGroup>[
-    calendar,
     camera,
+    calendar,
     contacts,
     location,
     locationAlways,
@@ -169,12 +176,14 @@ class PermissionGroup {
     speech,
     storage,
     ignoreBatteryOptimizations,
-    unknown,
+  
+   
   ];
 
   static const List<String> _names = <String>[
-    'calendar',
+    
     'camera',
+    'calendar',
     'contacts',
     'location',
     'locationAlways',
@@ -189,7 +198,8 @@ class PermissionGroup {
     'speech',
     'storage',
     'ignoreBatteryOptimizations',
-    'unknown',
+   
+   
   ];
 
   @override

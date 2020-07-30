@@ -61,7 +61,7 @@ public class PermissionUtils {
             case Manifest.permission.ACTIVITY_RECOGNITION:
                 return PermissionConstants.PERMISSION_GROUP_ACTIVITY_RECOGNITION;
             default:
-                return PermissionConstants.PERMISSION_GROUP_UNKNOWN;
+                return 20;
         }
     }
 
@@ -193,7 +193,7 @@ public class PermissionUtils {
             case PermissionConstants.PERMISSION_GROUP_MEDIA_LIBRARY:
             case PermissionConstants.PERMISSION_GROUP_PHOTOS:
             case PermissionConstants.PERMISSION_GROUP_REMINDERS:
-            case PermissionConstants.PERMISSION_GROUP_UNKNOWN:
+          
                 return null;
         }
 

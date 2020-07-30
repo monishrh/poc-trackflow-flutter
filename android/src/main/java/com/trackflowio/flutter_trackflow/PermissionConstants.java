@@ -11,8 +11,8 @@ final class PermissionConstants {
     static final int PERMISSION_CODE_IGNORE_BATTERY_OPTIMIZATIONS = 5672353;
 
     //PERMISSION_GROUP
-    static final int PERMISSION_GROUP_CALENDAR = 0;
-    static final int PERMISSION_GROUP_CAMERA = 1;
+    static final int PERMISSION_GROUP_CALENDAR = 1;
+    static final int PERMISSION_GROUP_CAMERA = 0;
     static final int PERMISSION_GROUP_CONTACTS = 2;
     static final int PERMISSION_GROUP_LOCATION = 3;
     static final int PERMISSION_GROUP_LOCATION_ALWAYS = 4;
@@ -30,12 +30,13 @@ final class PermissionConstants {
     static final int PERMISSION_GROUP_NOTIFICATION = 16;
     static final int PERMISSION_GROUP_ACCESS_MEDIA_LOCATION = 17;
     static final int PERMISSION_GROUP_ACTIVITY_RECOGNITION = 18;
-    static final int PERMISSION_GROUP_UNKNOWN = 19;
+   
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({
-            PERMISSION_GROUP_CALENDAR,
             PERMISSION_GROUP_CAMERA,
+            PERMISSION_GROUP_CALENDAR,
+            
             PERMISSION_GROUP_CONTACTS,
             PERMISSION_GROUP_LOCATION,
             PERMISSION_GROUP_LOCATION_ALWAYS,
@@ -53,32 +54,36 @@ final class PermissionConstants {
             PERMISSION_GROUP_NOTIFICATION,
             PERMISSION_GROUP_ACCESS_MEDIA_LOCATION,
             PERMISSION_GROUP_ACTIVITY_RECOGNITION,
-            PERMISSION_GROUP_UNKNOWN,
     })
     @interface PermissionGroup {
     }
 
     //PERMISSION_STATUS
-    static final int PERMISSION_STATUS_DENIED = 0;
-    static final int PERMISSION_STATUS_GRANTED = 1;
-    static final int PERMISSION_STATUS_RESTRICTED = 2;
-    static final int PERMISSION_STATUS_NOT_DETERMINED = 3;
-    static final int PERMISSION_STATUS_NEVER_ASK_AGAIN = 4;
+    static final int PERMISSION_STATUS_GRANTED = 0;
+    static final int PERMISSION_STATUS_DENIED = 1;
+    static final int PERMISSION_STATUS_NOT_APPLICABLE=2;
+    static final int PERMISSION_STATUS_NEVER_ASK_AGAIN = 3;
+    static final int PERMISSION_STATUS_RESTRICTED = 4;
+    static final int PERMISSION_STATUS_NOT_DETERMINED = 5;
+    
+   
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({
-            PERMISSION_STATUS_DENIED,
             PERMISSION_STATUS_GRANTED,
+            PERMISSION_STATUS_DENIED,
+            PERMISSION_STATUS_NOT_APPLICABLE,
+            PERMISSION_STATUS_NEVER_ASK_AGAIN,
             PERMISSION_STATUS_RESTRICTED,
             PERMISSION_STATUS_NOT_DETERMINED,
-        PERMISSION_STATUS_NEVER_ASK_AGAIN,
+       
     })
     @interface PermissionStatus {
     }
 
     //SERVICE_STATUS
-    static final int SERVICE_STATUS_DISABLED = 1;
-    static final int SERVICE_STATUS_ENABLED = 2;
+    static final int SERVICE_STATUS_DISABLED = 0;
+    static final int SERVICE_STATUS_ENABLED = 1;
     static final int SERVICE_STATUS_NOT_APPLICABLE = 2;
 
     @Retention(RetentionPolicy.SOURCE)
